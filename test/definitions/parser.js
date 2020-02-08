@@ -6,33 +6,26 @@
  * that the parser works as expected.
  */
 module.exports = [
-  // {
-  //   title: 'Minimal Graph',
-  //   graphml: 'minimal',
-  //   basics: {
-  //     type: 'directed',
-  //     multi: false,
-  //     version: '1.2',
-  //     mode: 'static',
-  //     defaultEdgeType: 'directed',
-  //     meta: {
-  //       creator: 'Gexf.net',
-  //       description: 'A hello world! file',
-  //       lastModifiedDate: '2009-03-20'
-  //     },
-  //     order: 2,
-  //     node: {
-  //       key: 0,
-  //       attributes: {
-  //         label: 'Hello'
-  //       }
-  //     },
-  //     size: 1,
-  //     edge: {
-  //       key: 0,
-  //       source: 0,
-  //       target: 1
-  //     }
-  //   }
-  // }
+  {
+    title: 'Basic Graph',
+    graphml: 'basic',
+    basics: {
+      type: 'undirected',
+      multi: false,
+      meta: {
+        id: 'G'
+      },
+      order: 11,
+      node: {
+        key: 'n5',
+        attributes: {}
+      },
+      size: 12,
+      edge: {
+        source: 'n5',
+        target: 'n7',
+        attributes: {}
+      }
+    }
+  }
 ];

@@ -35,7 +35,7 @@ exports.testAllFiles = function(parser) {
       assert.strictEqual(graph.hasNode(node.key), true);
       assert.deepEqual(
         graph.getNodeAttributes(node.key),
-        info.node.attributes || {}
+        node.attributes || {}
       );
 
       var edge = info.edge;
