@@ -1,0 +1,53 @@
+{
+  "name": "graphology-graphml",
+  "version": "0.1.0",
+  "description": "GRAPHML parser & writer for graphology.",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "browser",
+    "common",
+    "node"
+  ],
+  "scripts": {
+    "lint": "eslint ./**/*.js",
+    "prepublish": "npm run lint && npm test",
+    "test:browser": "mocha ./test/browser/endpoint.js",
+    "test": "npm run test:browser"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graphology/graphology-graphml.git"
+  },
+  "keywords": [
+    "graph",
+    "graphology",
+    "graphml"
+  ],
+  "author": {
+    "name": "Guillaume Plique",
+    "url": "http://github.com/Yomguithereal"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/graphology/graphology-graphml/issues"
+  },
+  "homepage": "https://github.com/graphology/graphology-graphml#readme",
+  "devDependencies": {
+    "@yomguithereal/eslint-config": "^4.0.0",
+    "eslint": "^6.8.0",
+    "graphology": "^0.15.1",
+    "mocha": "^7.0.1"
+  },
+  "eslintConfig": {
+    "extends": "@yomguithereal/eslint-config",
+    "globals": {
+      "Set": true
+    }
+  },
+  "dependencies": {
+    "graphology-utils": "^1.5.0",
+    "xmldom": "^0.2.1",
+    "xml-writer": "^1.7.0"
+  }
+}
