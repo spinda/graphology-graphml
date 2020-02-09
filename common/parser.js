@@ -1,11 +1,13 @@
-/* eslint no-self-compare: 0 */
 /**
- * Graphology Browser GRAPHML Parser
- * ==================================
+ * Graphology GRAPHML Parser
+ * ==========================
  *
- * Browser version of the graphology GRAPHML parser using DOMParser to function.
+ * graphology GRAPHML parser using DOMParser to function.
  */
 var isGraphConstructor = require('graphology-utils/is-graph-constructor');
+
+var DEFAULTS = require('./defaults.js');
+var DEFAULT_FORMATTER = DEFAULTS.DEFAULT_FORMATTER;
 
 function numericCaster(v) {
   return +v;
@@ -80,12 +82,10 @@ function collectAttributes(model, defaults, element) {
     key = dataElement.getAttribute('key');
     spec = model[key];
 
-    if (typeof spec === 'undefined') {
-      // TODO...
-    }
-    else {
+    if (typeof spec === 'undefined')
+      attr[key] = dataElement.textContent.trim();
+    else
       attr[spec.name] = spec.cast(dataElement.textContent.trim());
-    }
   }
 
   for (key in defaults) {
@@ -139,34 +139,36 @@ module.exports = function createParserFunction(DOMParser, Document) {
     // Graph-level attributes
     var graphId = GRAPH_ELEMENT.getAttribute('id');
 
-    if (typeof graphId !== 'undefined')
+    if (graphId)
       graph.setAttribute('id', graphId);
 
     // Collecting nodes
-    var i, l, nodeElement;
+    var i, l, nodeElement, key, attr;
 
     for (i = 0, l = NODE_ELEMENTS.length; i < l; i++) {
       nodeElement = NODE_ELEMENTS[i];
+      key = nodeElement.getAttribute('id');
 
-      graph.addNode(
-        nodeElement.getAttribute('id'),
-        collectAttributes(MODEL.models.node, MODEL.defaults.node, nodeElement)
-      );
+      attr = collectAttributes(MODEL.models.node, MODEL.defaults.node, nodeElement);
+      attr = DEFAULT_FORMATTER(attr);
+
+      graph.addNode(key, attr);
     }
 
     // Collecting edges
     var edgeElement, s, t;
 
+    // TODO: mixed graphs
     // TODO: edges with keys
     for (i = 0, l = EDGE_ELEMENTS.length; i < l; i++) {
       edgeElement = EDGE_ELEMENTS[i];
       s = edgeElement.getAttribute('source');
       t = edgeElement.getAttribute('target');
 
-      addDefaultEdge[1](
-        s, t,
-        collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement)
-      );
+      attr = collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement);
+      attr = DEFAULT_FORMATTER(attr);
+
+      addDefaultEdge[1](s, t, attr);
     }
 
     return graph;

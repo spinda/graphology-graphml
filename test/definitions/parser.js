@@ -53,5 +53,63 @@ module.exports = [
         }
       }
     }
+  },
+  {
+    title: 'Les Misérables',
+    graphml: 'miserables',
+    basics: {
+      type: 'undirected',
+      multi: false,
+      meta: {},
+      order: 77,
+      node: {
+        key: '11',
+        attributes: {
+          label: 'Valjean',
+          'Modularity Class': 1,
+          size: 100,
+          x: -87.93029,
+          y: 6.8120565,
+          color: '#f55b5b'
+        }
+      },
+      size: 254,
+      edge: {
+        source: '66',
+        target: '64',
+        attributes: {
+          weight: 3
+        }
+      }
+    }
+  },
+  {
+    title: 'Les Misérables Broken',
+    graphml: 'miserables_broken',
+    basics: {
+      type: 'undirected',
+      multi: false,
+      meta: {},
+      order: 77,
+      node: {
+        key: '11',
+        attributes: {
+          label: 'Valjean',
+          modularity_class: '1',
+          size: 100,
+          x: -87.93029,
+          y: 6.8120565,
+          color: '#f55b5b'
+        }
+      },
+      size: 254,
+      edge: {
+        source: '66',
+        target: '64',
+        attributes: {
+          weight: 3
+        }
+      }
+    }
   }
 ];
