@@ -7,6 +7,70 @@
  */
 var isGraphConstructor = require('graphology-utils/is-graph-constructor');
 
+function numericCaster(v) {
+  return +v;
+}
+
+function identity(v) {
+  return v;
+}
+
+var CASTERS = {
+  boolean: function(v) {
+    return v.toLowerCase() === 'true';
+  },
+  int: numericCaster,
+  long: numericCaster,
+  float: numericCaster,
+  double: numericCaster,
+  string: identity
+};
+
+function collectModel(modelElements) {
+  var i, l, m, id, name, type, element, defaultElement, defaultValue;
+
+  var models = {
+    node: {},
+    edge: {}
+  };
+
+  var defaults = {
+    node: {},
+    edge: {}
+  };
+
+  for (i = 0, l = modelElements.length; i < l; i++) {
+    element = modelElements[i];
+    m = element.getAttribute('for') || 'node';
+    id = element.getAttribute('id');
+    name = element.getAttribute('attr.name');
+    type = element.getAttribute('attr.type') || 'string';
+
+    defaultValue = undefined;
+    defaultElement = element.getElementsByTagName('default');
+
+    if (defaultElement.length !== 0)
+      defaultValue = defaultElement[0].textContent;
+
+    models[m][id] = {
+      name: name,
+      cast: CASTERS[type]
+    }
+
+    if (typeof defaultValue !== 'undefined')
+      defaults[m][id] = defaultValue;
+  }
+
+  return {
+    models: models,
+    defaults: defaults
+  };
+}
+
+function collectAttributes(model, defaults, element) {
+
+}
+
 /**
  * Factory taking implementations of `DOMParser` & `Document` returning
  * the parser function.
@@ -34,9 +98,12 @@ module.exports = function createParserFunction(DOMParser, Document) {
       throw new Error('graphology-gexf/parser: source should either be a XML document or a string.');
 
     var GRAPH_ELEMENT = xmlDoc.getElementsByTagName('graph')[0];
+    var MODEL_ELEMENTS = xmlDoc.getElementsByTagName('key');
     var NODE_ELEMENTS = xmlDoc.getElementsByTagName('node');
     var EDGE_ELEMENTS = xmlDoc.getElementsByTagName('edge');
     var EDGE_DEFAULT_TYPE = GRAPH_ELEMENT.getAttribute('edgedefault');
+
+    var modelResult = collectModel(MODEL_ELEMENTS);
 
     var graph = new Graph({type: EDGE_DEFAULT_TYPE});
 

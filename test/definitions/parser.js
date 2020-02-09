@@ -27,5 +27,16 @@ module.exports = [
         attributes: {}
       }
     }
-  }
+  },
+  // {
+  //   title: 'Attributes Graph',
+  //   graphml: 'attributes',
+  //   basics: {
+  //     type: 'undirected',
+  //     multi: false,
+  //     meta: {
+  //       id: 'G'
+  //     }
+  //   }
+  // }
 ];
