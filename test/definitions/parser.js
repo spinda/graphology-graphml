@@ -28,15 +28,30 @@ module.exports = [
       }
     }
   },
-  // {
-  //   title: 'Attributes Graph',
-  //   graphml: 'attributes',
-  //   basics: {
-  //     type: 'undirected',
-  //     multi: false,
-  //     meta: {
-  //       id: 'G'
-  //     }
-  //   }
-  // }
+  {
+    title: 'Attributes Graph',
+    graphml: 'attributes',
+    basics: {
+      type: 'undirected',
+      multi: false,
+      meta: {
+        id: 'G'
+      },
+      order: 6,
+      node: {
+        key: 'n4',
+        attributes: {
+          color: 'yellow'
+        }
+      },
+      size: 7,
+      edge: {
+        source: 'n1',
+        target: 'n3',
+        attributes: {
+          weight: 2
+        }
+      }
+    }
+  }
 ];

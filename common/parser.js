@@ -55,10 +55,10 @@ function collectModel(modelElements) {
     models[m][id] = {
       name: name,
       cast: CASTERS[type]
-    }
+    };
 
     if (typeof defaultValue !== 'undefined')
-      defaults[m][id] = defaultValue;
+      defaults[m][name] = defaultValue;
   }
 
   return {
@@ -68,7 +68,32 @@ function collectModel(modelElements) {
 }
 
 function collectAttributes(model, defaults, element) {
+  var dataElements = element.getElementsByTagName('data'),
+      dataElement;
 
+  var i, l, key, spec;
+
+  var attr = {};
+
+  for (i = 0, l = dataElements.length; i < l; i++) {
+    dataElement = dataElements[i];
+    key = dataElement.getAttribute('key');
+    spec = model[key];
+
+    if (typeof spec === 'undefined') {
+      // TODO...
+    }
+    else {
+      attr[spec.name] = spec.cast(dataElement.textContent.trim());
+    }
+  }
+
+  for (key in defaults) {
+    if (!(key in attr))
+      attr[key] = defaults[key];
+  }
+
+  return attr;
 }
 
 /**
@@ -103,7 +128,7 @@ module.exports = function createParserFunction(DOMParser, Document) {
     var EDGE_ELEMENTS = xmlDoc.getElementsByTagName('edge');
     var EDGE_DEFAULT_TYPE = GRAPH_ELEMENT.getAttribute('edgedefault');
 
-    var modelResult = collectModel(MODEL_ELEMENTS);
+    var MODEL = collectModel(MODEL_ELEMENTS);
 
     var graph = new Graph({type: EDGE_DEFAULT_TYPE});
 
@@ -123,18 +148,25 @@ module.exports = function createParserFunction(DOMParser, Document) {
     for (i = 0, l = NODE_ELEMENTS.length; i < l; i++) {
       nodeElement = NODE_ELEMENTS[i];
 
-      graph.addNode(nodeElement.getAttribute('id'));
+      graph.addNode(
+        nodeElement.getAttribute('id'),
+        collectAttributes(MODEL.models.node, MODEL.defaults.node, nodeElement)
+      );
     }
 
     // Collecting edges
     var edgeElement, s, t;
 
+    // TODO: edges with keys
     for (i = 0, l = EDGE_ELEMENTS.length; i < l; i++) {
       edgeElement = EDGE_ELEMENTS[i];
       s = edgeElement.getAttribute('source');
       t = edgeElement.getAttribute('target');
 
-      addDefaultEdge[1](s, t);
+      addDefaultEdge[1](
+        s, t,
+        collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement)
+      );
     }
 
     return graph;
