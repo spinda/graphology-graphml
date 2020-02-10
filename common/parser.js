@@ -154,7 +154,6 @@ module.exports = function createParserFunction(DOMParser, Document) {
     // Collecting edges
     var edgeElement, s, t, type;
 
-    // TODO: mixed graphs
     for (i = 0, l = EDGE_ELEMENTS.length; i < l; i++) {
       edgeElement = EDGE_ELEMENTS[i];
       id = edgeElement.getAttribute('id');
@@ -167,7 +166,11 @@ module.exports = function createParserFunction(DOMParser, Document) {
       attr = collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement);
       attr = DEFAULT_FORMATTER(attr);
 
-      // Should we upgrade to a multigraph?
+      // Should we upgrade to a mixed graph?
+      if (!graph.type !== 'mixed' && type !== graph.type)
+        graph.upgradeToMixed();
+
+      // Should we upgrade to a multi graph?
       if (!graph.multi) {
         if (type === 'undirected') {
           if (graph.hasUndirectedEdge(s, t))

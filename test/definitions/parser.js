@@ -141,5 +141,33 @@ module.exports = [
         undirected: true
       }
     }
+  },
+  {
+    title: 'Mixed MultiGraph',
+    graphml: 'mixed_multigraph',
+    basics: {
+      type: 'mixed',
+      multi: true,
+      meta: {
+        id: 'G'
+      },
+      order: 6,
+      node: {
+        key: 'n5',
+        attributes: {
+          color: 'turquoise'
+        }
+      },
+      size: 8,
+      edge: {
+        key: 'e6',
+        undirected: false,
+        source: 'n5',
+        target: 'n4',
+        attributes: {
+          weight: 1.1
+        }
+      }
+    }
   }
 ];
