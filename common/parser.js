@@ -136,9 +136,9 @@ module.exports = function createParserFunction(DOMParser, Document) {
       [graph.addDirectedEdge.bind(graph), graph.addUndirectedEdge.bind(graph)] :
       [graph.addUndirectedEdge.bind(graph), graph.addDirectedEdge.bind(graph)];
 
-    // var addDefaultEdgeWithKey = EDGE_DEFAULT_TYPE === 'undirected' ?
-    //   [graph.addDirectedEdgeWithKey.bind(graph), graph.addUndirectedEdgeWithKey.bind(graph)] :
-    //   [graph.addUndirectedEdgeWithKey.bind(graph), graph.addDirectedEdgeWithKey.bind(graph)];
+    var addDefaultEdgeWithKey = EDGE_DEFAULT_TYPE === 'undirected' ?
+      [graph.addDirectedEdgeWithKey.bind(graph), graph.addUndirectedEdgeWithKey.bind(graph)] :
+      [graph.addUndirectedEdgeWithKey.bind(graph), graph.addDirectedEdgeWithKey.bind(graph)];
 
     // Graph-level attributes
     var graphId = GRAPH_ELEMENT.getAttribute('id');
@@ -147,32 +147,35 @@ module.exports = function createParserFunction(DOMParser, Document) {
       graph.setAttribute('id', graphId);
 
     // Collecting nodes
-    var i, l, nodeElement, key, attr;
+    var i, l, nodeElement, id, attr;
 
     for (i = 0, l = NODE_ELEMENTS.length; i < l; i++) {
       nodeElement = NODE_ELEMENTS[i];
-      key = nodeElement.getAttribute('id');
+      id = nodeElement.getAttribute('id');
 
       attr = collectAttributes(MODEL.models.node, MODEL.defaults.node, nodeElement);
       attr = DEFAULT_FORMATTER(attr);
 
-      graph.addNode(key, attr);
+      graph.addNode(id, attr);
     }
 
     // Collecting edges
     var edgeElement, s, t;
 
     // TODO: mixed graphs
-    // TODO: edges with keys
     for (i = 0, l = EDGE_ELEMENTS.length; i < l; i++) {
       edgeElement = EDGE_ELEMENTS[i];
+      id = edgeElement.getAttribute('id');
       s = edgeElement.getAttribute('source');
       t = edgeElement.getAttribute('target');
 
       attr = collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement);
       attr = DEFAULT_FORMATTER(attr);
 
-      addDefaultEdge[1](s, t, attr);
+      if (id)
+        addDefaultEdgeWithKey[1](id, s, t, attr);
+      else
+        addDefaultEdge[1](s, t, attr);
     }
 
     return graph;

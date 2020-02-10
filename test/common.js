@@ -49,7 +49,7 @@ exports.testAllFiles = function(parser) {
       if (edge.key) {
         assert.strictEqual(graph.source(edge.key), '' + edge.source);
         assert.strictEqual(graph.target(edge.key), '' + edge.target);
-        assert.strictEqual(graph.directed(edge.key), !edge.undirected);
+        assert.strictEqual(graph.directed(edge.key), !edge.undirected, 'Wrong edge type!');
       }
 
       var attributes;
@@ -59,7 +59,7 @@ exports.testAllFiles = function(parser) {
       else
         attributes = graph.getEdgeAttributes(edge.source, edge.target);
 
-      assert.deepEqual(attributes, edge.attributes || {});
+      assert.deepEqual(attributes, edge.attributes || {}, 'Edge attributes mismatch!');
     });
   });
 };

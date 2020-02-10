@@ -75,10 +75,12 @@ module.exports = [
       },
       size: 254,
       edge: {
-        source: '66',
-        target: '64',
+        key: '169',
+        source: '63',
+        target: '62',
+        undirected: true,
         attributes: {
-          weight: 3
+          weight: 6
         }
       }
     }
