@@ -126,7 +126,7 @@ module.exports = function createParserFunction(DOMParser, Document) {
     var MODEL_ELEMENTS = xmlDoc.getElementsByTagName('key');
     var NODE_ELEMENTS = xmlDoc.getElementsByTagName('node');
     var EDGE_ELEMENTS = xmlDoc.getElementsByTagName('edge');
-    var EDGE_DEFAULT_TYPE = GRAPH_ELEMENT.getAttribute('edgedefault');
+    var EDGE_DEFAULT_TYPE = GRAPH_ELEMENT.getAttribute('edgedefault') || 'undirected';
 
     var MODEL = collectModel(MODEL_ELEMENTS);
 
@@ -135,6 +135,10 @@ module.exports = function createParserFunction(DOMParser, Document) {
     var addDefaultEdge = EDGE_DEFAULT_TYPE === 'undirected' ?
       [graph.addDirectedEdge.bind(graph), graph.addUndirectedEdge.bind(graph)] :
       [graph.addUndirectedEdge.bind(graph), graph.addDirectedEdge.bind(graph)];
+
+    // var addDefaultEdgeWithKey = EDGE_DEFAULT_TYPE === 'undirected' ?
+    //   [graph.addDirectedEdgeWithKey.bind(graph), graph.addUndirectedEdgeWithKey.bind(graph)] :
+    //   [graph.addUndirectedEdgeWithKey.bind(graph), graph.addDirectedEdgeWithKey.bind(graph)];
 
     // Graph-level attributes
     var graphId = GRAPH_ELEMENT.getAttribute('id');
