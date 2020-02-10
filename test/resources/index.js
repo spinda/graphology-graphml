@@ -9,7 +9,9 @@ var FILES = [
   'attributes',
   'basic',
   'miserables',
-  'miserables_broken'
+  'miserables_broken',
+  'multigraph',
+  'mixed_multigraph'
 ];
 
 function loadFile(name) {

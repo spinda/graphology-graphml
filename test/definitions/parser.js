@@ -113,5 +113,33 @@ module.exports = [
         }
       }
     }
+  },
+  {
+    title: 'MultiGraph',
+    graphml: 'multigraph',
+    basics: {
+      type: 'undirected',
+      multi: true,
+      meta: {
+        id: 'G'
+      },
+      order: 6,
+      node: {
+        key: 'n4',
+        attributes: {
+          color: 'yellow'
+        }
+      },
+      size: 9,
+      edge: {
+        key: 'e8',
+        source: 'n5',
+        target: 'n4',
+        attributes: {
+          weight: 7.5
+        },
+        undirected: true
+      }
+    }
   }
 ];

@@ -38,5 +38,8 @@
     <edge id="e6" source="n5" target="n4">
       <data key="d1">1.1</data>
     </edge>
+     <edge id="e8" source="n5" target="n4">
+      <data key="d1">7.5</data>
+    </edge>
   </graph>
 </graphml>

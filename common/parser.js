@@ -132,14 +132,6 @@ module.exports = function createParserFunction(DOMParser, Document) {
 
     var graph = new Graph({type: EDGE_DEFAULT_TYPE});
 
-    var addDefaultEdge = EDGE_DEFAULT_TYPE === 'undirected' ?
-      [graph.addDirectedEdge.bind(graph), graph.addUndirectedEdge.bind(graph)] :
-      [graph.addUndirectedEdge.bind(graph), graph.addDirectedEdge.bind(graph)];
-
-    var addDefaultEdgeWithKey = EDGE_DEFAULT_TYPE === 'undirected' ?
-      [graph.addDirectedEdgeWithKey.bind(graph), graph.addUndirectedEdgeWithKey.bind(graph)] :
-      [graph.addUndirectedEdgeWithKey.bind(graph), graph.addDirectedEdgeWithKey.bind(graph)];
-
     // Graph-level attributes
     var graphId = GRAPH_ELEMENT.getAttribute('id');
 
@@ -160,7 +152,7 @@ module.exports = function createParserFunction(DOMParser, Document) {
     }
 
     // Collecting edges
-    var edgeElement, s, t;
+    var edgeElement, s, t, type;
 
     // TODO: mixed graphs
     for (i = 0, l = EDGE_ELEMENTS.length; i < l; i++) {
@@ -168,14 +160,35 @@ module.exports = function createParserFunction(DOMParser, Document) {
       id = edgeElement.getAttribute('id');
       s = edgeElement.getAttribute('source');
       t = edgeElement.getAttribute('target');
+      type = edgeElement.getAttribute('directed') === 'true' ?
+        'directed' :
+        EDGE_DEFAULT_TYPE;
 
       attr = collectAttributes(MODEL.models.edge, MODEL.defaults.edge, edgeElement);
       attr = DEFAULT_FORMATTER(attr);
 
-      if (id)
-        addDefaultEdgeWithKey[1](id, s, t, attr);
-      else
-        addDefaultEdge[1](s, t, attr);
+      // Should we upgrade to a multigraph?
+      if (!graph.multi) {
+        if (type === 'undirected') {
+          if (graph.hasUndirectedEdge(s, t))
+            graph.upgradeToMulti();
+        }
+        else if (graph.hasDirectedEdge(s, t))
+          graph.upgradeToMulti();
+      }
+
+      if (type === 'undirected') {
+        if (id)
+          graph.addUndirectedEdgeWithKey(id, s, t, attr);
+        else
+          graph.addUndirectedEdge(s, t, attr);
+      }
+      else {
+        if (id)
+          graph.addDirectedEdgeWithKey(id, s, t, attr);
+        else
+          graph.addDirectedEdge(s, t, attr);
+      }
     }
 
     return graph;
