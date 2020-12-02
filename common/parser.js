@@ -28,15 +28,38 @@ var CASTERS = {
   string: identity
 };
 
+function getGraphDataElements(graphElement) {
+  var children = graphElement.childNodes;
+  var dataElements = [];
+
+  var element;
+
+  for (var i = 0, l = children.length; i < l; i++) {
+    element = children[i];
+
+    if (element.nodeType !== 1)
+      continue;
+
+    if (element.tagName.toLowerCase() !== 'data')
+      break;
+
+    dataElements.push(element);
+  }
+
+  return dataElements;
+}
+
 function collectModel(modelElements) {
   var i, l, m, id, name, type, element, defaultElement, defaultValue;
 
   var models = {
+    graph: {},
     node: {},
     edge: {}
   };
 
   var defaults = {
+    graph: {},
     node: {},
     edge: {}
   };
@@ -123,6 +146,7 @@ module.exports = function createParserFunction(DOMParser, Document) {
       throw new Error('graphology-gexf/parser: source should either be a XML document or a string.');
 
     var GRAPH_ELEMENT = xmlDoc.getElementsByTagName('graph')[0];
+    var GRAPH_DATA_ELEMENTS = getGraphDataElements(GRAPH_ELEMENT);
     var MODEL_ELEMENTS = xmlDoc.getElementsByTagName('key');
     var NODE_ELEMENTS = xmlDoc.getElementsByTagName('node');
     var EDGE_ELEMENTS = xmlDoc.getElementsByTagName('edge');
@@ -137,6 +161,14 @@ module.exports = function createParserFunction(DOMParser, Document) {
 
     if (graphId)
       graph.setAttribute('id', graphId);
+
+    var dummyGraphElement = xmlDoc.createElement('graph');
+    GRAPH_DATA_ELEMENTS.forEach(function(el) {
+      dummyGraphElement.appendChild(el);
+    });
+    var graphAttributes = collectAttributes(MODEL.models.graph, MODEL.defaults.graph, dummyGraphElement);
+
+    graph.mergeAttributes(graphAttributes);
 
     // Collecting nodes
     var i, l, nodeElement, id, attr;

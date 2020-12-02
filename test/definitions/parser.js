@@ -35,7 +35,8 @@ module.exports = [
       type: 'undirected',
       multi: false,
       meta: {
-        id: 'G'
+        id: 'G',
+        mode: 'static'
       },
       order: 6,
       node: {
