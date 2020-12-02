@@ -25,7 +25,7 @@ exports.testAllFiles = function(parser) {
       var graph = parser(Graph, resource);
       // console.log(graph);
 
-      assert.deepEqual(graph.getAttributes(), info.meta);
+      assert.deepStrictEqual(graph.getAttributes(), info.meta);
       assert.strictEqual(graph.order, info.order);
       assert.strictEqual(graph.size, info.size);
       assert.strictEqual(graph.type, info.type);
@@ -34,7 +34,7 @@ exports.testAllFiles = function(parser) {
       var node = info.node;
 
       assert.strictEqual(graph.hasNode(node.key), true);
-      assert.deepEqual(
+      assert.deepStrictEqual(
         graph.getNodeAttributes(node.key),
         node.attributes || {}
       );
@@ -59,7 +59,7 @@ exports.testAllFiles = function(parser) {
       else
         attributes = graph.getEdgeAttributes(edge.source, edge.target);
 
-      assert.deepEqual(attributes, edge.attributes || {}, 'Edge attributes mismatch!');
+      assert.deepStrictEqual(attributes, edge.attributes || {}, 'Edge attributes mismatch!');
     });
   });
 };
